@@ -1,0 +1,81 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+        "url": "data/Airlines_A380_No_Of_Flights.csv"
+    },
+    "params": [
+        {
+            "name": "Continent_selection",
+            "bind": {
+                "input": "select",
+                "options": [
+                    null,
+                    "Europe",
+                    "Asia",
+                    "Oceania"
+                ],
+                "labels": [
+                    "Show All",
+                    "Europe",
+                    "Asia",
+                    "Oceania"
+                ],
+                "name": "Continent Selection: "
+            }
+        }
+    ],
+    "transform": [
+        {"filter": "Continent_selection == null || datum.Continent == Continent_selection"}
+    ],
+    "encoding": {
+        "y": {"field": "IATA", "type": "nominal"},
+        "x": {"field": "Number of A380 Flights", "type": "quantitative", "scale": {"domain": [0,60]}}
+    },
+    "layer": [
+        {
+            "selection": {
+                "continent_highlight": {
+                    "type": "multi",
+                    "fields": ["Continent"],
+                    "bind": "legend"
+                }
+            },
+            "mark": "bar",
+            "encoding": {
+                "y": {"field": "IATA", "type": "nominal"},
+                "x": {"field": "Number of A380 Flights", "type": "quantitative", "scale": {"domain": [0,60]}},
+                "tooltip": [
+                    {"field": "Number of A380 Flights", "type": "quantitative"},
+                    {"field": "Airline Name", "type": "nominal"}   
+                ],
+                "color": {
+                    "field": "Continent",
+                    "type": "nominal",
+                    "scale": {
+                        "domain": [
+                            "Europe",
+                            "Asia",
+                            "Oceania"
+                        ],
+                        "range": [
+                            "#e41a1c",
+                            "#377eb8",
+                            "#ff7f00"   
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "left",
+                "baseline": "middle",
+                "dx": 3
+            },
+            "encoding": {
+                "text": {"field": "Number of A380 Flights", "type": "quantitative"}
+            }
+        }
+    ]
+}
